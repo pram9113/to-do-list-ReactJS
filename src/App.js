@@ -10,16 +10,38 @@ class App extends Component {
     super(props);
 
       this.state= {
-        warnaBorder: "black",
-        toDo: []
+        toDo: [],
+        errorText: ""
       }
-  }
+    }
+      //this.todo = ""}
 
-  State = {
-    toDo: "",
-    error: ""
+  toDo() {
+    let toDoValue = this.todoInput.value
+
+    let newTodos = this.state.todos
+    newTodos.push(toDoValue)
+
+    this.setState({
+      todos: newTodos
+    })
   }
+  // onRemove() {
+  //    let items = this.state.items;
+  //    items.splice(items);
   
+  //   this.setState({items : items})
+  // }
+  // klik() {
+  //   alert('Please enter your to do list...')
+  // }
+
+  // removeTodo(id) {
+  //   let todos = this.state.todos.filter((todo,index) => {
+  //   return id!= index
+  //   })
+  // }
+
   render() {
 
     let styles = {
@@ -31,37 +53,48 @@ class App extends Component {
       backgroundColor: "grey",
       color: "white"
     }
+
+
     return (
     <div style={styles}> 
       <h1>To Do List</h1>
-
+        {this.state.errorText &&
+          <div className="alert alert-danger">{this.state.errorText}</div>
+        }
         <div className="form-group">
-        <label for="ExampleFormControlTextarea1"></label>
-          <textarea className="form-control" type="text" id="textaria" rows="2" placeholder="type your to do list here..." onKeyDown={e => {
+          <input className="form-control" type="text" placeholder="type your to do list here..." onKeyDown={e => {
             if(e.keyCode === 13) {
-              //also code for on click instead 13
-              console.log(e.keyCode);
+             
+              if(e.target.value === " ") {
+                this.setState({
+                  errorText: "Please type your to do list..."
+                })
+            } else {
               this.setState({
+                errorText: "",
                 toDo: this.state.toDo.concat([e.target.value])
               })
-              //error: " ";
               e.target.value=" ";
-              //how to add warning "please enter you to do list"
             }
-            else {
-                this.setState ({
-                //toDo: this.state.toDo.concat([e.target.value]),
-                error: "Please enter your to do list..."
-              })
-            }
+          
           }
-          } />
+        }}/>
+          
         </div>
-    
+        
+         <p><strong>To Do's Count</strong>: {this.state.toDo.length}</p>
         <div className="form-group">
           <MyButton buttonText="kirim"/>
         </div> 
-          <MyList toDo={this.state.toDo} />
+          <MyList onItemDelete={(item, i) => {
+            let toDoNew = this.state.toDo;
+            delete toDoNew[i];
+
+            this.setState({
+              toDo: toDoNew
+            });
+          }}
+          toDo={this.state.toDo} />
       </div>
     );
   }

@@ -4,11 +4,16 @@ import PropTypes from 'prop-types';
 class MyList extends React.Component {
 
     render () {
-
+        
         return(
             <ul>
-                {this.props.toDo.map((item, i) => {
-                    return <li>{item} <button className="btn btn-danger btn-sm">&times;</button></li>
+                {this.props.toDo.map((items, i) => {
+                    return <li>
+                        {items} <button onClick={e=> {
+                            this.props.onItemDelete(items, i);
+                        }} className="btn btn-danger btn-sm">&times;
+                        </button>
+                    </li>
                 }
                 )
                 }
@@ -17,4 +22,7 @@ class MyList extends React.Component {
     }
 }
 
+MyList.PropTypes = {
+    onItemDelete: PropTypes.func.isRequired
+}
 export default MyList;
